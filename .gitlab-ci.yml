@@ -1,0 +1,38 @@
+# This file is a template, and might need editing before it works on your project.
+# Official language image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/python/tags/
+image: "python:3.8" #commands to run in the Docker container before starting each job.
+services:
+  - postgres:latest
+
+variables:
+  POSTGRES_DB: descent_db_2
+  POSTGRES_USER: connstanta
+  POSTGRES_PASSWORD: bananana
+  POSTGRES_HOST_AUTH_METHOD: trust
+
+before_script:
+  - python --version
+  - pip install -r requirements.txt # different stages in the pipeline
+  - export DATABASE_HOST=postgres
+
+stages:
+  - Test_engine_core
+  - Test_web_core
+  - Test_coverage
+
+test:
+  stage: Test_engine_core
+  script:
+    - pytest descent_engine_core/test_engine_core/
+
+Test_web_core:
+  stage: Test_web_core
+  script:
+    - python manage.py migrate
+    - pytest -v test_web_core/
+
+Test_web_core_pytest_cov:
+  stage: Test_coverage
+  script:
+    - pytest --cov

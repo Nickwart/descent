@@ -1,0 +1,5 @@
+.idea/
+__pycache__/
+venv
+descent_engine_core/test_engine_core/__pycache__/*
+descent_engine_core/test_engine_core/__pycache__/
